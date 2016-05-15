@@ -10,39 +10,95 @@ namespace InMemoryIdentity.StorageProvider
     public class RoleStore<TRole> : IQueryableRoleStore<TRole>
         where TRole : IdentityRole
     {
+        private RoleTable roleTable;
+        public InMemoryContext Database { get; private set; }
+
         public IQueryable<TRole> Roles
         {
-            get { throw new NotImplementedException(); }
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+
+        /// <summary>
+        /// Default constructor that initializes a new MySQLDatabase
+        /// instance using the Default Connection string
+        /// </summary>
+        public RoleStore()
+        {
+            new RoleStore<TRole>(new InMemoryContext());
+        }
+
+        /// <summary>
+        /// Constructor that takes a MySQLDatabase as argument 
+        /// </summary>
+        /// <param name="database"></param>
+        public RoleStore(InMemoryContext database)
+        {
+            Database = database;
+            roleTable = new RoleTable(database);
         }
 
         public Task CreateAsync(TRole role)
         {
-            throw new NotImplementedException();
+            if (role == null)
+            {
+                throw new ArgumentNullException("role");
+            }
+
+            roleTable.Insert(role);
+
+            return Task.FromResult<object>(null);
         }
 
         public Task DeleteAsync(TRole role)
         {
-            throw new NotImplementedException();
+            if (role == null)
+            {
+                throw new ArgumentNullException("user");
+            }
+
+            roleTable.Delete(role.Id);
+
+            return Task.FromResult<Object>(null);
         }
 
         public Task<TRole> FindByIdAsync(string roleId)
         {
-            throw new NotImplementedException();
+            TRole result = roleTable.GetRoleById(roleId) as TRole;
+
+            return Task.FromResult<TRole>(result);
         }
 
         public Task<TRole> FindByNameAsync(string roleName)
         {
-            throw new NotImplementedException();
+            TRole result = roleTable.GetRoleByName(roleName) as TRole;
+
+            return Task.FromResult<TRole>(result);
         }
 
         public Task UpdateAsync(TRole role)
         {
-            throw new NotImplementedException();
+            if (role == null)
+            {
+                throw new ArgumentNullException("user");
+            }
+
+            roleTable.Update(role);
+
+            return Task.FromResult<Object>(null);
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            if (Database != null)
+            {
+                Database.Dispose();
+                Database = null;
+            }
         }
+
     }
 }
