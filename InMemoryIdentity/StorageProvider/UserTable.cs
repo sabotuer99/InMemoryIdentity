@@ -29,7 +29,10 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns></returns>
         public string GetUserName(string userId)
         {
-            throw new NotImplementedException();
+            if (!_database.users.ContainsKey(userId))
+                return null;
+
+            return _database.users[userId].UserName;
         }
 
         /// <summary>
@@ -39,7 +42,7 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns></returns>
         public string GetUserId(string userName)
         {
-            throw new NotImplementedException();
+            return _database.users.Where(x => x.Value.UserName == userName).FirstOrDefault().Key;
         }
 
         /// <summary>
@@ -49,7 +52,10 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns></returns>
         public TUser GetUserById(string userId)
         {
-            throw new NotImplementedException();
+            if (!_database.users.ContainsKey(userId))
+                return null;
+
+            return _database.users[userId] as TUser;
         }
 
         /// <summary>
@@ -59,12 +65,14 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns></returns>
         public List<TUser> GetUserByName(string userName)
         {
-            throw new NotImplementedException();
+            var result = _database.users.Where(x => x.Value.UserName == userName).Select(x => x.Value).Cast<TUser>().ToList();
+            return result.Count > 0 ? result : null;
         }
 
         public List<TUser> GetUserByEmail(string email)
         {
-            throw new NotImplementedException();
+            var result = _database.users.Where(x => x.Value.Email == email).Select(x => x.Value).Cast<TUser>().ToList();
+            return result.Count > 0 ? result : null;
         }
 
         /// <summary>
@@ -74,7 +82,8 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns></returns>
         public string GetPasswordHash(string userId)
         {
-            throw new NotImplementedException();
+            var user = GetUserById(userId);
+            return user == null ? null : user.PasswordHash;
         }
 
         /// <summary>
@@ -85,7 +94,11 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns></returns>
         public int SetPasswordHash(string userId, string passwordHash)
         {
-            throw new NotImplementedException();
+            var user = GetUserById(userId);
+            if (user == null)
+                return 0;
+            user.PasswordHash = passwordHash;
+            return 1;
         }
 
         /// <summary>
@@ -95,7 +108,8 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns></returns>
         public string GetSecurityStamp(string userId)
         {
-            throw new NotImplementedException();
+            var user = GetUserById(userId);
+            return user == null ? null : user.SecurityStamp;
         }
 
         /// <summary>
@@ -105,7 +119,11 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns></returns>
         public int Insert(TUser user)
         {
-            throw new NotImplementedException();
+            if (_database.users.ContainsKey(user.Id))
+                throw new ArgumentException("Insert Failed: User already exists.");
+
+            _database.users.Add(user.Id, user);
+            return  1;
         }
 
         /// <summary>
@@ -115,7 +133,7 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns></returns>
         private int Delete(string userId)
         {
-            throw new NotImplementedException();
+            return _database.users.Remove(userId) ? 1 : 0;
         }
 
         /// <summary>
@@ -125,7 +143,7 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns></returns>
         public int Delete(TUser user)
         {
-            throw new NotImplementedException();
+            return Delete(user.Id);
         }
 
         /// <summary>
@@ -135,7 +153,11 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns></returns>
         public int Update(TUser user)
         {
-            throw new NotImplementedException();
+            if (!_database.users.ContainsKey(user.Id))
+                throw new ArgumentException("Update Failed: User not found.");
+
+            _database.users[user.Id] = user;
+            return 1;
         }
     }
 }
