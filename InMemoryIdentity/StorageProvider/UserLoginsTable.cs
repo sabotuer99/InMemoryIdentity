@@ -31,7 +31,16 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns></returns>
         public int Delete(IdentityUser user, UserLoginInfo login)
         {
-            throw new NotImplementedException();
+            var userId = user.Id;
+            if (!_database.userLogins.ContainsKey(userId))
+                return 0;
+
+            var remove = _database.userLogins[userId]
+                .Where(x => x.ProviderKey == login.ProviderKey 
+                            && x.LoginProvider == login.LoginProvider)
+                .FirstOrDefault();
+
+            return _database.userLogins[userId].Remove(remove) ? 1 : 0;
         }
 
         /// <summary>
@@ -41,7 +50,13 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns></returns>
         public int Delete(string userId)
         {
-            throw new NotImplementedException();
+            if (!_database.userLogins.ContainsKey(userId))
+                return 0;
+
+            var count = _database.userLogins[userId].Count();
+            _database.userLogins.Remove(userId);
+            return count;
+
         }
 
         /// <summary>
@@ -52,7 +67,16 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns></returns>
         public int Insert(IdentityUser user, UserLoginInfo login)
         {
-            throw new NotImplementedException();
+            if (!_database.userLogins.ContainsKey(user.Id))
+                _database.userLogins[user.Id] = new List<UserLoginInfo>();
+
+            if (_database.userLogins[user.Id].Where(x => x.LoginProvider == login.LoginProvider &&
+                x.ProviderKey == login.ProviderKey).Count() > 0)
+                throw new ArgumentException("Insert failed: Duplicate login info.");
+
+            _database.userLogins[user.Id].Add(login);
+
+            return 1;
         }
 
         /// <summary>
@@ -62,7 +86,9 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns></returns>
         public string FindUserIdByLogin(UserLoginInfo userLogin)
         {
-            throw new NotImplementedException();
+            return _database.userLogins.Where(x => x.Value.Where(
+                y => y.LoginProvider == userLogin.LoginProvider && 
+                     y.ProviderKey == userLogin.ProviderKey).Count() == 1).FirstOrDefault().Key;
         }
 
         /// <summary>
@@ -72,7 +98,10 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns></returns>
         public List<UserLoginInfo> FindByUserId(string userId)
         {
-            throw new NotImplementedException();
+            if (!_database.userLogins.ContainsKey(userId))
+                return null;
+
+            return _database.userLogins[userId];
         }
     }
 }

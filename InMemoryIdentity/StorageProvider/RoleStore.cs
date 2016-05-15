@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace InMemoryIdentity.StorageProvider
@@ -14,27 +15,27 @@ namespace InMemoryIdentity.StorageProvider
             get { throw new NotImplementedException(); }
         }
 
-        public System.Threading.Tasks.Task CreateAsync(TRole role)
+        public Task CreateAsync(TRole role)
         {
             throw new NotImplementedException();
         }
 
-        public System.Threading.Tasks.Task DeleteAsync(TRole role)
+        public Task DeleteAsync(TRole role)
         {
             throw new NotImplementedException();
         }
 
-        public System.Threading.Tasks.Task<TRole> FindByIdAsync(string roleId)
+        public Task<TRole> FindByIdAsync(string roleId)
         {
             throw new NotImplementedException();
         }
 
-        public System.Threading.Tasks.Task<TRole> FindByNameAsync(string roleName)
+        public Task<TRole> FindByNameAsync(string roleName)
         {
             throw new NotImplementedException();
         }
 
-        public System.Threading.Tasks.Task UpdateAsync(TRole role)
+        public Task UpdateAsync(TRole role)
         {
             throw new NotImplementedException();
         }
