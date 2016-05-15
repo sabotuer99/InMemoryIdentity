@@ -165,7 +165,7 @@
     <Compile Include="StorageProvider\InMemoryContext.cs" />
     <Compile Include="StorageProvider\RoleTable.cs" />
     <Compile Include="StorageProvider\RoleStore.cs" />
-    <Compile Include="StorageProvider\UserClaimTable.cs" />
+    <Compile Include="StorageProvider\UserClaimsTable.cs" />
     <Compile Include="StorageProvider\UserLoginsTable.cs" />
     <Compile Include="StorageProvider\UserRoleTable.cs" />
     <Compile Include="StorageProvider\UserTable.cs" />

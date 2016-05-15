@@ -30,7 +30,12 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns></returns>
         public ClaimsIdentity FindByUserId(string userId)
         {
-            throw new NotImplementedException();
+            if (!_database.claims.ContainsKey(userId))
+                return new ClaimsIdentity();
+
+            var claims = _database.claims[userId];
+
+            return new ClaimsIdentity(claims);
         }
 
         /// <summary>
@@ -40,7 +45,12 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns></returns>
         public int Delete(string userId)
         {
-            throw new NotImplementedException();
+            if (!_database.claims.ContainsKey(userId))
+                return 0;
+
+            var deleted = _database.claims[userId].Count;
+            _database.claims.Remove(userId);
+            return deleted;
         }
 
         /// <summary>
@@ -51,7 +61,17 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns></returns>
         public int Insert(Claim userClaim, string userId)
         {
-            throw new NotImplementedException();
+            if (!_database.claims.ContainsKey(userId))
+                _database.claims[userId] = new List<Claim>();
+
+            if (_database.claims[userId].Where(x => 
+                x.Type == userClaim.Type && 
+                x.Value == userClaim.Value).Count() > 0)
+                throw new ArgumentException("Insert failed: Duplicate claim.");
+
+            _database.claims[userId].Add(userClaim);
+
+            return 1;
         }
 
         /// <summary>
@@ -62,7 +82,13 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns></returns>
         public int Delete(IdentityUser user, Claim claim)
         {
-            throw new NotImplementedException();
+            if (!_database.claims.ContainsKey(user.Id))
+                return 0;
+
+            var claims = _database.claims[user.Id];
+            var remove = claims.Where(x => x.Type == claim.Type && x.Value == claim.Value).FirstOrDefault();
+
+            return claims.Remove(remove) ? 1 : 0;
         }
     }
  
