@@ -110,6 +110,7 @@
     <Compile Include="StorageProvider\RoleTableTests.cs" />
     <Compile Include="StorageProvider\UserClaimTableTests.cs" />
     <Compile Include="StorageProvider\UserLoginsTableTests.cs" />
+    <Compile Include="StorageProvider\UserRoleTableTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />

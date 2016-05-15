@@ -29,7 +29,10 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns></returns>
         public List<string> FindByUserId(string userId)
         {
-            throw new NotImplementedException();
+            if (!_database.userRoles.ContainsKey(userId))
+                return null;
+
+            return _database.userRoles[userId];
         }
 
         /// <summary>
@@ -39,7 +42,12 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns></returns>
         public int Delete(string userId)
         {
-            throw new NotImplementedException();
+            if (!_database.userRoles.ContainsKey(userId))
+                return 0;
+
+            var count = _database.userRoles[userId].Count();
+            _database.userRoles.Remove(userId);
+            return count;
         }
 
         /// <summary>
@@ -50,7 +58,15 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns></returns>
         public int Insert(IdentityUser user, string roleId)
         {
-            throw new NotImplementedException();
+            if (!_database.userRoles.ContainsKey(user.Id))
+                _database.userRoles[user.Id] = new List<string>();
+
+            if(_database.userRoles[user.Id].Contains(roleId))
+                throw new ArgumentException(String.Format("Insert failed: User already assigned to roleId {0}.", roleId));
+
+            _database.userRoles[user.Id].Add(roleId);
+
+            return 1;
         }
     }
 }

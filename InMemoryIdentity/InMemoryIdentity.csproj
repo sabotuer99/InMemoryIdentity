@@ -167,7 +167,7 @@
     <Compile Include="StorageProvider\RoleStore.cs" />
     <Compile Include="StorageProvider\UserClaimsTable.cs" />
     <Compile Include="StorageProvider\UserLoginsTable.cs" />
-    <Compile Include="StorageProvider\UserRoleTable.cs" />
+    <Compile Include="StorageProvider\UserRolesTable.cs" />
     <Compile Include="StorageProvider\UserTable.cs" />
     <Compile Include="StorageProvider\UserStore.cs" />
   </ItemGroup>
