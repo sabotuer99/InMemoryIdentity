@@ -10,6 +10,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using InMemoryIdentity.Models;
 using InMemoryIdentity.StorageProvider;
+using System.Diagnostics;
 
 namespace InMemoryIdentity
 {
@@ -18,6 +19,9 @@ namespace InMemoryIdentity
         public Task SendAsync(IdentityMessage message)
         {
             // Plug in your email service here to send an email.
+            Trace.WriteLine("Destination: " + message.Destination + " " +
+                            "Subject: " + message.Subject + " " +
+                            "Body: " + message.Body);
             return Task.FromResult(0);
         }
     }
@@ -27,6 +31,9 @@ namespace InMemoryIdentity
         public Task SendAsync(IdentityMessage message)
         {
             // Plug in your SMS service here to send a text message.
+            Trace.WriteLine("Destination: " + message.Destination + " " +
+                            "Subject: " + message.Subject + " " +
+                            "Body: " + message.Body);
             return Task.FromResult(0);
         }
     }

@@ -7,7 +7,7 @@ using System.Web;
 namespace InMemoryIdentity.StorageProvider
 {
     /// <summary>
-    /// Class that represents the UserLogins table in the MySQL Database
+    /// Class that represents the UserLogins table in the InMemoryContext
     /// </summary>
     public class UserLoginsTable
     {

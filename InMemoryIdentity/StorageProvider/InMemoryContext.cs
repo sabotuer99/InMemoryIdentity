@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -10,10 +11,19 @@ namespace InMemoryIdentity.StorageProvider
     {
 
         public Dictionary<string, IdentityRole> roles;
-        private Dictionary<string, List<Claim>> claims;
-        private Dictionary<string, string> userLogins;
-        private Dictionary<string, string> userRoles;
-        private Dictionary<string, IdentityUser> users;
+        public Dictionary<string, List<Claim>> claims;
+        public Dictionary<string, List<UserLoginInfo>> userLogins;
+        public Dictionary<string, List<string>> userRoles;
+        public Dictionary<string, IdentityUser> users;
+
+        public InMemoryContext()
+        {
+            roles = new Dictionary<string, IdentityRole>();
+            claims = new Dictionary<string, List<Claim>>();
+            userLogins = new Dictionary<string, List<UserLoginInfo>>();
+            userRoles = new Dictionary<string, List<string>>();
+            users = new Dictionary<string, IdentityUser>();
+        }
 
         public void Dispose()
         {

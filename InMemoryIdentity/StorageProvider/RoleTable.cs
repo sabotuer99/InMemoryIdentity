@@ -19,7 +19,6 @@ namespace InMemoryIdentity.StorageProvider
             _database = database;
         }
 
-
         /// <summary>
         /// Deltes a role from the Roles table
         /// </summary>
@@ -27,7 +26,7 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns></returns>
         public int Delete(string roleId)
         {
-            throw new NotImplementedException();
+            return _database.roles.Remove(roleId) ? 1 : 0;
         }
 
         /// <summary>
@@ -37,7 +36,8 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns></returns>
         public int Insert(IdentityRole role)
         {
-            throw new NotImplementedException();
+            _database.roles.Add(role.Id, role);
+            return 1;
         }
 
         /// <summary>
@@ -47,7 +47,10 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns>Role name</returns>
         public string GetRoleName(string roleId)
         {
-            throw new NotImplementedException();
+            if (!_database.roles.ContainsKey(roleId))
+                return null;
+
+            return _database.roles[roleId].Name;
         }
 
         /// <summary>
@@ -57,7 +60,7 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns>Role's Id</returns>
         public string GetRoleId(string roleName)
         {
-            throw new NotImplementedException();
+            return _database.roles.Where(x => x.Value.Name == roleName).SingleOrDefault().Key;
         }
 
         /// <summary>
@@ -67,8 +70,10 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns></returns>
         public IdentityRole GetRoleById(string roleId)
         {
-            throw new NotImplementedException();
+            if (!_database.roles.ContainsKey(roleId))
+                return null;
 
+            return _database.roles[roleId];
         }
 
         /// <summary>
@@ -78,12 +83,17 @@ namespace InMemoryIdentity.StorageProvider
         /// <returns></returns>
         public IdentityRole GetRoleByName(string roleName)
         {
-            throw new NotImplementedException();
+            return _database.roles.Where(x => x.Value.Name == roleName).SingleOrDefault().Value;
         }
 
         public int Update(IdentityRole role)
         {
-            throw new NotImplementedException();
+            if (!_database.roles.ContainsKey(role.Id))
+                throw new ArgumentException(String.Format("Update failed: Role with id {0} not found.", role.Id));
+
+
+            _database.roles[role.Id] = role;
+            return 1;
         }
     }
 }
