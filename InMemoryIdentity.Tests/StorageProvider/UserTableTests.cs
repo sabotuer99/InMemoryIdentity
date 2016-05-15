@@ -12,6 +12,13 @@ namespace InMemoryIdentity.Tests.StorageProvider
     [TestFixture]
     class UserTableTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            InMemoryContext.Init();
+        }
+
+
         [Test]
         public void GetUserName_ValidUserId_ReturnsName()
         {

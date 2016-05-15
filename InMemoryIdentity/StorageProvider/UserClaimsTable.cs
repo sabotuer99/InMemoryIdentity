@@ -31,7 +31,7 @@ namespace InMemoryIdentity.StorageProvider
         public ClaimsIdentity FindByUserId(string userId)
         {
             if (!_database.claims.ContainsKey(userId))
-                return new ClaimsIdentity();
+                return new ClaimsIdentity(new List<Claim>());
 
             var claims = _database.claims[userId];
 

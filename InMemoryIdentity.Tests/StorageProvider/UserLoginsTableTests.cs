@@ -12,6 +12,12 @@ namespace InMemoryIdentity.Tests.StorageProvider
     [TestFixture]
     class UserLoginsTableTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            InMemoryContext.Init();
+        }
+
         [Test]
         public void Insert_UserDoesNotExist_InsertsLoginInfo()
         {

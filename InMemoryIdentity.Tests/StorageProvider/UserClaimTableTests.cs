@@ -12,6 +12,12 @@ namespace InMemoryIdentity.Tests.StorageProvider
     [TestFixture]
     class UserClaimTableTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            InMemoryContext.Init();
+        }
+
         [Test]
         public void Insert_UserHasNoClaims_AddsClaimToUser()
         {

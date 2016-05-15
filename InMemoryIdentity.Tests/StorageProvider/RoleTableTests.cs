@@ -11,6 +11,12 @@ namespace InMemoryIdentity.Tests.StorageProvider
     [TestFixture]
     class RoleTableTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            InMemoryContext.Init();
+        }
+
         [Test]
         public void Insert_RecordDoesntExist_RecordInserted()
         {

@@ -11,6 +11,12 @@ namespace InMemoryIdentity.Tests.StorageProvider
     [TestFixture]
     class UserRolesTableTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            InMemoryContext.Init();
+        }
+
         [Test]
         public void FindByUserId_UserIdValid_ReturnsListOfRoles()
         {

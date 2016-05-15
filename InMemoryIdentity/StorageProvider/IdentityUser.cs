@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Web;
 
 namespace InMemoryIdentity.StorageProvider
@@ -85,5 +86,11 @@ namespace InMemoryIdentity.StorageProvider
         ///     Used to record failures for the purposes of lockout
         /// </summary>
         public virtual int AccessFailedCount { get; set; }
+
+
+        //Totally cheating on these
+        public virtual ICollection<Claim> Claims { get { return new UserClaimsTable(new InMemoryContext()).FindByUserId(this.Id).Claims as ICollection<Claim> ?? new List<Claim>(); } }
+        public virtual ICollection<UserLoginInfo> Logins { get { return new UserLoginsTable(new InMemoryContext()).FindByUserId(this.Id) as ICollection<UserLoginInfo> ?? new List<UserLoginInfo>(); } }
+        public virtual ICollection<string> Roles { get { return new UserRolesTable(new InMemoryContext()).FindByUserId(this.Id) as ICollection<string> ?? new List<string>(); } }
     }
 }

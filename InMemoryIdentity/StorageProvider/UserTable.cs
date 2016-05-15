@@ -120,7 +120,11 @@ namespace InMemoryIdentity.StorageProvider
         public int Insert(TUser user)
         {
             if (_database.users.ContainsKey(user.Id))
-                throw new ArgumentException("Insert Failed: User already exists.");
+            {
+                return Update(user);
+                //throw new ArgumentException("Insert Failed: User already exists.");
+            }
+                
 
             _database.users.Add(user.Id, user);
             return  1;
@@ -154,7 +158,10 @@ namespace InMemoryIdentity.StorageProvider
         public int Update(TUser user)
         {
             if (!_database.users.ContainsKey(user.Id))
-                throw new ArgumentException("Update Failed: User not found.");
+            {
+                return Insert(user);
+                //throw new ArgumentException("Update Failed: User not found.");
+            }
 
             _database.users[user.Id] = user;
             return 1;
